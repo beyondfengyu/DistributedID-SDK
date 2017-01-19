@@ -56,7 +56,7 @@ public class PressTestAsync {
             countDownLatch.await(10, TimeUnit.SECONDS);
 
             logger.info("invokeAsync test num is: {}, cast time: {} millsec, throughput: {} send/millsec",
-                        NUM, cast, NUM/cast);
+                        NUM, cast, (double)NUM/cast);
             amount += NUM;
             NUM = NUM + 5000;
             TimeUnit.SECONDS.sleep(2);

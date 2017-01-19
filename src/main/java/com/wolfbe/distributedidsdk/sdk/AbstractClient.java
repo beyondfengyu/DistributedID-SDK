@@ -35,6 +35,7 @@ public abstract class AbstractClient implements Client {
     protected Bootstrap b;
     protected int port;
 
+
     public void init() {
         asyncResponse = new ConcurrentHashMap<>();
         workGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 10, new ThreadFactory() {
@@ -56,6 +57,10 @@ public abstract class AbstractClient implements Client {
         }
     }
 
+    public static void cast(String prefix, long start) {
+        System.out.println(prefix + " cast time is: " + (System.nanoTime() - start)/1000);
+    }
+
     @Override
     public SdkProto invokeSync(SdkProto sdkProto, long timeoutMillis) throws RemotingConnectException,
             RemotingTimeoutException, InterruptedException, RemotingSendRequestException {
@@ -65,7 +70,6 @@ public abstract class AbstractClient implements Client {
             try {
                 final ResponseFuture responseFuture = new ResponseFuture(rqid, timeoutMillis, null, null);
                 asyncResponse.put(rqid, responseFuture);
-
                 channel.writeAndFlush(sdkProto).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture channelFuture) throws Exception {
@@ -92,7 +96,6 @@ public abstract class AbstractClient implements Client {
                                 responseFuture.getCause());
                     }
                 }
-
                 return resultProto;
             } catch (Exception e) {
                 logger.error("invokeSync fail, addr is " + NettyUtil.parseRemoteAddr(channel), e);

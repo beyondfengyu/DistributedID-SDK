@@ -8,6 +8,8 @@ import com.wolfbe.distributedidsdk.exception.RemotingTooMuchRequestException;
 import com.wolfbe.distributedidsdk.sdk.ResponseFuture;
 import com.wolfbe.distributedidsdk.sdk.SdkClient;
 import com.wolfbe.distributedidsdk.sdk.SdkProto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -17,43 +19,41 @@ import java.util.concurrent.TimeUnit;
  * @author Andy
  */
 public class PressTestSync {
-    private static final int NUM = 2000;
+    private static final Logger logger = LoggerFactory.getLogger("PressTestSync");
+    private static int NUM = 60000;
 
     public static void main(String[] args) throws InterruptedException, RemotingTimeoutException,
             RemotingConnectException, RemotingTooMuchRequestException, RemotingSendRequestException {
         SdkClient client = new SdkClient();
         client.init();
         client.start();
-        long start = System.currentTimeMillis();
-//        for (int i = 0; i < NUM; i++) {
-//            SdkProto sdkProto = new SdkProto();
-////            System.out.println(i+" sendProto: " + sdkProto.toString());
-//            SdkProto resultProto = client.invokeSync(sdkProto, 2000);
-////            System.out.println(i+" resultProto: " + resultProto.toString());
-//        }
-        long end = System.currentTimeMillis();
-        long cast = (end -start)/1000 + 1;
-        System.out.println("invokeSync test num is: " + NUM + ", cast time: " + cast+"s, throughput: "+NUM/cast+" send/sec");
 
-        final CountDownLatch countDownLatch = new CountDownLatch(NUM);
-        start = System.currentTimeMillis();
-        for (int i = 0; i < NUM; i++) {
-            final SdkProto sdkProto = new SdkProto();
-            final int finalI = i;
-            client.invokeAsync(sdkProto, 2000, new InvokeCallback() {
-                @Override
-                public void operationComplete(ResponseFuture responseFuture) {
-                    System.out.println(finalI + " sendProto: " + sdkProto.toString());
-                    countDownLatch.countDown();
-                    System.out.println(finalI + " resultProto: " + responseFuture.getSdkProto().toString());
-                }
-            });
+        long start = 0;
+        long end = 0;
+        long cast = 0;
+        long amount = 0;
+        long allcast = 0;
+
+        for(int k = 0; k < 20; k++) {
+            start = System.currentTimeMillis();
+            for (int i = 0; i < NUM; i++) {
+                final SdkProto sdkProto = new SdkProto();
+                client.invokeSync(sdkProto, 5000);
+            }
+
+            end = System.currentTimeMillis();
+            cast = (end - start) ;
+            allcast += cast;
+
+            logger.info("invokeSync test num is: {}, cast time: {} millsec, throughput: {} send/millsec",
+                    NUM, cast, (double)NUM/cast);
+
+            amount += NUM;
+            NUM += 5000;
+            TimeUnit.SECONDS.sleep(2);
         }
-        end = System.currentTimeMillis();
-        cast = (end -start);
-        countDownLatch.await(10, TimeUnit.SECONDS);
-        System.out.println("invokeAsync test num is: " + NUM + ", cast time: " + cast+"s, throughput: "+ 1000* NUM/cast+" send/sec");
 
-
+        logger.info("invokeSync test all num is: {}, all cast time: {} millsec, all throughput: {} send/millsec",
+                amount, allcast, amount/allcast);
     }
 }

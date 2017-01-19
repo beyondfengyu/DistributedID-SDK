@@ -54,12 +54,11 @@ public class SdkClient extends AbstractClient {
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, SdkProto sdkProto) throws Exception {
             final int rqid = sdkProto.getRqid();
-            final ResponseFuture responseFuture = asyncResponse.get(sdkProto.getRqid());
+            final ResponseFuture responseFuture = asyncResponse.get(rqid);
             if (responseFuture != null) {
                 responseFuture.setSdkProto(sdkProto);
                 responseFuture.release();
                 asyncResponse.remove(rqid);
-
                 // 异步请求，执行回调函数
                 if (responseFuture.getInvokeCallback() != null) {
                     responseFuture.executeInvokeCallback();

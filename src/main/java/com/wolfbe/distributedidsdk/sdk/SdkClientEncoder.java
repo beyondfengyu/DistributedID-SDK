@@ -16,7 +16,7 @@ public class SdkClientEncoder extends MessageToByteEncoder<SdkProto> {
 
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, SdkProto sdkProto, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, SdkProto sdkProto, ByteBuf out) throws Exception {
         out.writeInt(sdkProto.getRqid());
         out.writeLong(sdkProto.getDid());
     }
