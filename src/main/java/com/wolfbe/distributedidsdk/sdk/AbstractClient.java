@@ -26,8 +26,8 @@ public abstract class AbstractClient implements Client {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected final Semaphore asyncSemaphore = new Semaphore(10000);
-    protected final Semaphore onewaySemaphore = new Semaphore(10000);
+    protected final Semaphore asyncSemaphore = new Semaphore(100000);
+    protected final Semaphore onewaySemaphore = new Semaphore(100000);
 
     protected ConcurrentMap<Integer, ResponseFuture> asyncResponse;
     protected NioEventLoopGroup workGroup;
