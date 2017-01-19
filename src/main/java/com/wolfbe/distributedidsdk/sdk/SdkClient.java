@@ -59,6 +59,7 @@ public class SdkClient extends AbstractClient {
                 responseFuture.setSdkProto(sdkProto);
                 responseFuture.release();
                 asyncResponse.remove(rqid);
+
                 // 异步请求，执行回调函数
                 if (responseFuture.getInvokeCallback() != null) {
                     responseFuture.executeInvokeCallback();

@@ -63,6 +63,6 @@ public class PressTestAsync {
         }
 
         logger.info("invokeAsync test all num is: {}, all cast time: {} millsec, all throughput: {} send/millsec",
-                amount, allcast, amount/allcast);
+                amount, allcast, (double)amount/allcast);
     }
 }
