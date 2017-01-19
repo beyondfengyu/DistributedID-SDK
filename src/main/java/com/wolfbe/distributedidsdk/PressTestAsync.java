@@ -31,6 +31,8 @@ public class PressTestAsync {
         long start = 0;
         long end = 0;
         long cast = 0;
+        long amount = 0;
+        long allcast = 0;
 
         for(int k = 0; k < 10; k++) {
             final CountDownLatch countDownLatch = new CountDownLatch(NUM);
@@ -49,22 +51,18 @@ public class PressTestAsync {
             }
 
             end = System.currentTimeMillis();
-            cast = (end - start) / 1000;
-
-            TimeUnit.SECONDS.sleep(2);
-
-            if (cast == 0){
-//                System.out.println("invokeAsync test num is: " + NUM + ", cast time " + (end - start) + " millsec");
-                System.out.println("invokeAsync test num is: " + NUM + ", cast time: " + (end - start) + " millsec, throughput: " + NUM / (end-start) + " send/millsec");
-
-                NUM = NUM + 5000;
-                continue;
-            }
-
+            cast = (end - start) ;
+            allcast += cast;
             countDownLatch.await(10, TimeUnit.SECONDS);
-            System.out.println("invokeAsync test num is: " + NUM + ", cast time: " + cast + "s, throughput: " + NUM / cast + " send/sec");
-            NUM = NUM + 5000;
 
+            logger.info("invokeAsync test num is: {}, cast time: {} millsec, throughput: {} send/millsec",
+                        NUM, cast, NUM/cast);
+            amount += NUM;
+            NUM = NUM + 5000;
+            TimeUnit.SECONDS.sleep(2);
         }
+
+        logger.info("invokeAsync test all num is: {}, all cast time: {} millsec, all throughput: {} send/millsec",
+                amount, allcast, amount/allcast);
     }
 }
