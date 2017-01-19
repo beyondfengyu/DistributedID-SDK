@@ -13,28 +13,30 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 同步请求压测
  * @author Andy
  */
-public class SdkStartup {
-    private static final int NUM = 100;
+public class PressTestSync {
+    private static final int NUM = 2000;
 
     public static void main(String[] args) throws InterruptedException, RemotingTimeoutException,
             RemotingConnectException, RemotingTooMuchRequestException, RemotingSendRequestException {
         SdkClient client = new SdkClient();
         client.init();
         client.start();
+        long start = System.currentTimeMillis();
+//        for (int i = 0; i < NUM; i++) {
+//            SdkProto sdkProto = new SdkProto();
+////            System.out.println(i+" sendProto: " + sdkProto.toString());
+//            SdkProto resultProto = client.invokeSync(sdkProto, 2000);
+////            System.out.println(i+" resultProto: " + resultProto.toString());
+//        }
+        long end = System.currentTimeMillis();
+        long cast = (end -start)/1000 + 1;
+        System.out.println("invokeSync test num is: " + NUM + ", cast time: " + cast+"s, throughput: "+NUM/cast+" send/sec");
 
-        // 测试同步请求，关注rqid是否对应
-        for (int i = 0; i < NUM; i++) {
-            SdkProto sdkProto = new SdkProto();
-            System.out.println(i+" sendProto: " + sdkProto.toString());
-            SdkProto resultProto = client.invokeSync(sdkProto, 2000);
-            System.out.println(i+" resultProto: " + resultProto.toString());
-        }
-        System.out.println(">>>>>>invokeync test finish");
-
-        // 测试异步请求，关注rqid是否对应
         final CountDownLatch countDownLatch = new CountDownLatch(NUM);
+        start = System.currentTimeMillis();
         for (int i = 0; i < NUM; i++) {
             final SdkProto sdkProto = new SdkProto();
             final int finalI = i;
@@ -47,8 +49,11 @@ public class SdkStartup {
                 }
             });
         }
+        end = System.currentTimeMillis();
+        cast = (end -start);
         countDownLatch.await(10, TimeUnit.SECONDS);
-        System.out.println(">>>>>>invokeAsync test finish");
+        System.out.println("invokeAsync test num is: " + NUM + ", cast time: " + cast+"s, throughput: "+ 1000* NUM/cast+" send/sec");
+
 
     }
 }

@@ -5,8 +5,8 @@ package com.wolfbe.distributedidsdk.util;
  */
 public class GlobalConfig {
 
-    //    public static String DEFAULT_HOST = "localhost";
-    public static String DEFAULT_HOST = "120.24.234.49";
+    public static String DEFAULT_HOST = "localhost";
+//    public static String DEFAULT_HOST = "service.wolfbe.com";
     public static int DEFAULT_PORT = 16830;
 
     /**

@@ -110,7 +110,7 @@ public abstract class AbstractClient implements Client {
     public void invokeAsync(SdkProto sdkProto, long timeoutMillis, final InvokeCallback invokeCallback) throws
             RemotingConnectException, RemotingTooMuchRequestException, RemotingTimeoutException, InterruptedException, RemotingSendRequestException {
         final Channel channel = cf.channel();
-        if (channel.isActive()) {
+        if (channel.isOpen() && channel.isActive()) {
             final int rqid = sdkProto.getRqid();
             boolean acquired = asyncSemaphore.tryAcquire(timeoutMillis, TimeUnit.MILLISECONDS);
             if (acquired) {
@@ -136,7 +136,7 @@ public abstract class AbstractClient implements Client {
                             } finally {
                                 responseFuture.release();
                             }
-                            logger.warn("send a request command to channel <" + NettyUtil.parseRemoteAddr(channel) + "> failed.");
+                            logger.warn("send a request command to channel <" + NettyUtil.parseRemoteAddr(channel) + "> failed.",channelFuture.cause());
                         }
                     });
                 } catch (Exception e) {
@@ -179,7 +179,7 @@ public abstract class AbstractClient implements Client {
                         }
                     });
                 } catch (Exception e) {
-                    logger.warn("send a request to channel <" + NettyUtil.parseRemoteAddr(channel) + "> Exception", e);
+                    logger.warn("send a request to channel <" + NettyUtil.parseRemoteAddr(channel) + "> Exception");
                     throw new RemotingSendRequestException(NettyUtil.parseRemoteAddr(channel), e);
                 } finally {
                     asyncResponse.remove(rqid);

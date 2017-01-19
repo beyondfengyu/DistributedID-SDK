@@ -35,7 +35,7 @@ public class SdkClient extends AbstractClient {
             cf.channel().closeFuture().addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                    logger.info("client channel close");
+                    logger.error("client channel close", channelFuture.cause());
                     shutdown();
                 }
             });

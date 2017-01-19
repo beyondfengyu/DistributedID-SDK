@@ -23,8 +23,7 @@ public class ResponseFuture {
     private volatile SdkProto sdkProto;
     private volatile boolean isSendStateOk;
 
-    public ResponseFuture(int rqid, long timeoutMillis, InvokeCallback invokeCallback,
-                          Semaphore semaphore) {
+    public ResponseFuture(int rqid, long timeoutMillis, InvokeCallback invokeCallback, Semaphore semaphore) {
         this.rqid = rqid;
         this.timeoutMillis = timeoutMillis;
         this.invokeCallback = invokeCallback;
