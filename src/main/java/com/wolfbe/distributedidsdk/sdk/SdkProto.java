@@ -9,15 +9,17 @@ public class SdkProto {
 
     private static AtomicInteger requestId = new AtomicInteger(0);
 
-    private int rqid = requestId.incrementAndGet(); //请求的ID
+    private int rqid; //请求的ID
     private long did; //全局的ID
 
+    public SdkProto(){
+        rqid = requestId.incrementAndGet();
+        did = 0;
+    }
 
-    public static SdkProto createSdkProto(int rqid, long did) {
-        SdkProto sdkProto = new SdkProto();
-        sdkProto.setDid(did);
-        sdkProto.setRqid(rqid);
-        return sdkProto;
+    public SdkProto(int rqid, long did) {
+        this.rqid = rqid;
+        this.did = did;
     }
 
     public int getRqid() {

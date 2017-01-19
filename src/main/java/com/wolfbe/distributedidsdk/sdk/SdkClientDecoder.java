@@ -26,7 +26,7 @@ public class SdkClientDecoder extends FixedLengthFrameDecoder {
             if (buf == null) {
                 return null;
             }
-            return SdkProto.createSdkProto(buf.readInt(), buf.readLong());
+            return new SdkProto(buf.readInt(), buf.readLong());
         } catch (Exception e) {
             logger.error("decode exception, " + NettyUtil.parseRemoteAddr(ctx.channel()), e);
             NettyUtil.closeChannel(ctx.channel());

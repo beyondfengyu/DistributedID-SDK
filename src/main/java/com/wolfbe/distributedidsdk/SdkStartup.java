@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @author Andy
  */
 public class SdkStartup {
-    private static final int NUM = 100000;
+    private static final int NUM = 10000;
 
     public static void main(String[] args) throws InterruptedException, RemotingTimeoutException,
             RemotingConnectException, RemotingTooMuchRequestException, RemotingSendRequestException {
@@ -26,11 +26,13 @@ public class SdkStartup {
         long start = System.currentTimeMillis();
         for (int i = 0; i < NUM; i++) {
             SdkProto sdkProto = new SdkProto();
+            System.out.println(i+" sendProto: " + sdkProto.toString());
             SdkProto resultProto = client.invokeSync(sdkProto, 2000);
             System.out.println(i+" resultProto: " + resultProto.toString());
         }
         long end = System.currentTimeMillis();
-        System.out.println("invokeSync test num is: " + NUM + ", cast time: " + (end - start));
+        long cast = (end -start)/1000;
+        System.out.println("invokeSync test num is: " + NUM + ", cast time: " + cast+"s, throughput: "+NUM/cast+" send/sec");
 
         final CountDownLatch countDownLatch = new CountDownLatch(NUM);
         start = System.currentTimeMillis();
