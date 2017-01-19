@@ -8,14 +8,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Andy
  */
 public class SdkClient extends AbstractClient {
-
-    protected AtomicInteger rqid = new AtomicInteger(0);
 
     @Override
     public void start() {
@@ -71,7 +68,7 @@ public class SdkClient extends AbstractClient {
                     responseFuture.putResponse(sdkProto);
                 }
             }else{
-                logger.warn("receive response, but not matched any request,, ", NettyUtil.parseRemoteAddr(ctx.channel()));
+                logger.warn("receive response, but not matched any request, address is {}", NettyUtil.parseRemoteAddr(ctx.channel()));
                 logger.warn("response data is {}",sdkProto.toString());
             }
         }

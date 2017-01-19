@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author Andy
  */
 public class SdkClientDecoder extends FixedLengthFrameDecoder {
@@ -27,11 +26,11 @@ public class SdkClientDecoder extends FixedLengthFrameDecoder {
             if (buf == null) {
                 return null;
             }
-            return new SdkProto(buf.readInt(), buf.readLong());
+            return SdkProto.createSdkProto(buf.readInt(), buf.readLong());
         } catch (Exception e) {
             logger.error("decode exception, " + NettyUtil.parseRemoteAddr(ctx.channel()), e);
             NettyUtil.closeChannel(ctx.channel());
-        }finally {
+        } finally {
             if (buf != null) {
                 buf.release();
             }
@@ -42,7 +41,7 @@ public class SdkClientDecoder extends FixedLengthFrameDecoder {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         Channel channel = ctx.channel();
-        logger.error("SdkServerDecoder channel [{}] error and will be closed", NettyUtil.parseRemoteAddr(channel),cause);
+        logger.error("SdkServerDecoder channel [{}] error and will be closed", NettyUtil.parseRemoteAddr(channel), cause);
         NettyUtil.closeChannel(channel);
     }
 }

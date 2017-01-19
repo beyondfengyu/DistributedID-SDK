@@ -1,16 +1,23 @@
 package com.wolfbe.distributedidsdk.sdk;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author Andy
  */
 public class SdkProto {
 
-    private int rqid; //请求的ID
+    private static AtomicInteger requestId = new AtomicInteger(0);
+
+    private int rqid = requestId.incrementAndGet(); //请求的ID
     private long did; //全局的ID
 
-    public SdkProto(int rqid, long did) {
-        this.rqid = rqid;
-        this.did = did;
+
+    public static SdkProto createSdkProto(int rqid, long did) {
+        SdkProto sdkProto = new SdkProto();
+        sdkProto.setDid(did);
+        sdkProto.setRqid(rqid);
+        return sdkProto;
     }
 
     public int getRqid() {
