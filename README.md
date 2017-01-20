@@ -1,5 +1,5 @@
 # DistributedID-SDK
-分布式ID生成器的SDK,[DistributedID](https://github.com/beyondfengyu/DistributedID)的SDK方式接入
+分布式ID生成器的SDK,[DistributedID](https://github.com/beyondfengyu/DistributedID)的SDK方式接入。
 <br>
 * 基于Netty框架实现通信交互；
 * 提供同步请求的方法；
