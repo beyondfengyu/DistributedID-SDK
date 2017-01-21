@@ -16,4 +16,4 @@
 ## 交流
 如果希望讨论交流技术，可以加Q群：**136798125**
 <br>
-或者看看我的网站：[http://www.wolfbe.com](http://www.wolfbe.com)
+我的网站：[http://www.wolfbe.com](http://www.wolfbe.com)
